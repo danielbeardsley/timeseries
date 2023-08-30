@@ -1,0 +1,104 @@
+openapi: 3.0.3
+info:
+  title: Timeseries
+  version: 1.0.0
+tags:
+  - name: metric
+    description: Something you want to measure or record
+  - name: measurement
+    description: An individual measurement of a metric
+paths:
+  /metric:
+    post:
+      tags:
+        - metric
+      summary: Create a Metric
+      operationId: createMetric
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Metric.Request'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Metric.Response'
+  /metric/{metricId}:
+    put:
+      tags:
+        - metric
+      summary: Update info about a Metric
+      operationId: updateMetric
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Metric.Request'
+        required: true
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Metric not found
+  /metric/{metricId}/record:
+    post:
+      tags:
+        - measurement
+      summary: Record a measurement of a metric
+      operationId: recordMesaurement
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Measurement.Request'
+        required: true
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Metric not found
+components:
+  schemas:
+    Metric.Request:
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: Propane Tank Level
+        type:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+    Metric.Response:
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: Propane Tank Level
+        tags:
+          type: array
+          items:
+            type: string
+    Measurement.Request:
+      required:
+        - value
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int32
+          description: Unix timestamp at which this observation was taken, defaults to current timestamp
+        value:
+          type: number
+          description: Number to record at this time
+        note:
+          type: string
