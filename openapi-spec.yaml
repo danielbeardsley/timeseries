@@ -44,6 +44,20 @@ paths:
           description: Success
         '404':
           description: Metric not found
+    get:
+      tags:
+        - metric
+      summary: Get a metric
+      operationId: getMetric
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Metric.Response'
+        '404':
+          description: Metric not found
   /metric/{metricId}/record:
     post:
       tags:
@@ -88,9 +102,28 @@ components:
           type: array
           items:
             type: string
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/Measurement.Response'
     Measurement.Request:
       required:
         - value
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int32
+          description: Unix timestamp at which this observation was taken, defaults to current timestamp
+        value:
+          type: number
+          description: Number to record at this time
+        note:
+          type: string
+    Measurement.Response:
+      required:
+        - value
+        - timestamp
       type: object
       properties:
         timestamp:
