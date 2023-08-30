@@ -91,21 +91,14 @@ components:
           items:
             type: string
     Metric.Response:
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-          example: Propane Tank Level
-        tags:
-          type: array
-          items:
-            type: string
-        values:
-          type: array
-          items:
-            $ref: '#/components/schemas/Measurement.Response'
+      allOf:
+        - $ref: '#/components/schemas/Metric.Request'
+        - type: object
+          properties:
+            values:
+              type: array
+              items:
+                $ref: '#/components/schemas/Measurement.Response'
     Measurement.Request:
       required:
         - value
@@ -121,17 +114,9 @@ components:
         note:
           type: string
     Measurement.Response:
-      required:
-        - value
-        - timestamp
-      type: object
-      properties:
-        timestamp:
-          type: integer
-          format: int32
-          description: Unix timestamp at which this observation was taken, defaults to current timestamp
-        value:
-          type: number
-          description: Number to record at this time
-        note:
-          type: string
+      allOf:
+        - $ref: '#/components/schemas/Measurement.Request'
+        - type: object
+          required:
+            - value
+            - timestamp
