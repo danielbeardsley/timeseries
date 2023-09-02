@@ -119,6 +119,9 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/Measurement.Response'
+            metricId:
+              type: string
+              format: uuid
     Measurement.Request:
       required:
         - value
