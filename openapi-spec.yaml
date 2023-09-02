@@ -8,6 +8,26 @@ tags:
   - name: measurement
     description: An individual measurement of a metric
 paths:
+  /collection:
+    post:
+      tags:
+        - collection
+      summary: Create a Metric Collection
+      operationId: createMetricCollection
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricCollection.Response'
   /metric:
     post:
       tags:
@@ -120,3 +140,12 @@ components:
           required:
             - value
             - timestamp
+    MetricCollection.Response:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Steve's Measurements
+        collectionId:
+          type: string
+          format: uuid
