@@ -28,12 +28,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MetricCollection.Response'
-  /metrics:
+  /collections/{collectionId}/metrics:
     post:
       tags:
         - metric
       summary: Create a Metric
       operationId: createMetric
+      parameters:
+        - $ref: '#/components/parameters/collectionId'
       requestBody:
         content:
           application/json:
@@ -53,6 +55,8 @@ paths:
         - metric
       summary: Update info about a Metric
       operationId: updateMetric
+      parameters:
+        - $ref: '#/components/parameters/metricId'
       requestBody:
         content:
           application/json:
@@ -69,6 +73,8 @@ paths:
         - metric
       summary: Get a metric
       operationId: getMetric
+      parameters:
+        - $ref: '#/components/parameters/metricId'
       responses:
         '200':
           description: Success
@@ -84,6 +90,8 @@ paths:
         - measurement
       summary: Record a measurement of a metric
       operationId: recordMesaurement
+      parameters:
+        - $ref: '#/components/parameters/metricId'
       requestBody:
         content:
           application/json:
@@ -162,3 +170,20 @@ components:
                   metricId:
                     type: string
                     format: uuid
+  parameters:
+    collectionId:
+      name: collectionId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: UUID of the metric collection
+    metricId:
+      name: metricId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: UUID of the metric
