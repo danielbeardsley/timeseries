@@ -28,6 +28,23 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MetricCollection.Response'
+  /collections/{collectionId}:
+    get:
+      tags:
+        - collection
+      summary: Get a single metric collection
+      operationId: getMetricCollection
+      parameters:
+        - $ref: '#/components/parameters/collectionId'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricCollection.Response'
+        '404':
+          description: Metric Collection not found
   /collections/{collectionId}/metrics:
     post:
       tags:
