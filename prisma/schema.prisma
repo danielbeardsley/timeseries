@@ -11,10 +11,17 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
-model users {
-  id        Int      @id @default(autoincrement())
+model Metric {
+  id        String   @id @default(uuid())
   name      String
-  email     String   @unique
-  image     String
-  createdAt DateTime @default(now())
+  tags      String[]
+  measurements Measurement[]
+}
+
+model Measurement {
+  id        Int    @id @default(autoincrement())
+  metric    Metric  @relation(fields: [metricId], references: [id])
+  metricId  String
+  value     Float
+  note      String?
 }
