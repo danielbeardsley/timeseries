@@ -8,7 +8,8 @@
     "dev": "prisma generate && next dev",
     "build": "prisma generate && prisma db push && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "migrate": "prisma db push"
   },
   "dependencies": {
     "@prisma/client": "^5.2.0",
