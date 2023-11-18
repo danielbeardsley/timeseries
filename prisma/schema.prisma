@@ -14,7 +14,6 @@ datasource db {
 model Metric {
   id        String   @id @default(uuid())
   name      String
-  tags      String[]
   measurements Measurement[]
 }
 
@@ -23,5 +22,4 @@ model Measurement {
   metric    Metric  @relation(fields: [metricId], references: [id])
   metricId  String
   value     Float
-  note      String?
 }
