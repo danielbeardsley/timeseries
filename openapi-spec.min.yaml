@@ -1,0 +1,134 @@
+openapi: 3.0.3
+info:
+  title: Timeseries
+  version: 1.0.0
+tags:
+  - name: metric
+    description: Something you want to measure or record
+  - name: measurement
+    description: An individual measurement of a metric
+paths:
+  /metrics:
+    post:
+      tags:
+        - metric
+      summary: Create a Metric
+      operationId: createMetric
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Metric.Request'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Metric.Response'
+  /metrics/{metricId}:
+    put:
+      tags:
+        - metric
+      summary: Update info about a Metric
+      operationId: updateMetric
+      parameters:
+        - $ref: '#/components/parameters/metricId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Metric.Request'
+        required: true
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Metric not found
+    get:
+      tags:
+        - metric
+      summary: Get a metric
+      operationId: getMetric
+      parameters:
+        - $ref: '#/components/parameters/metricId'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Metric.Response'
+        '404':
+          description: Metric not found
+  /metrics/{metricId}/record:
+    post:
+      tags:
+        - measurement
+      summary: Record a measurement of a metric
+      operationId: recordMesaurement
+      parameters:
+        - $ref: '#/components/parameters/metricId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Measurement.Request'
+        required: true
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Metric not found
+components:
+  schemas:
+    Metric.Request:
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: Propane Tank Level
+    Metric.Response:
+      allOf:
+        - $ref: '#/components/schemas/Metric.Request'
+        - type: object
+          properties:
+            values:
+              type: array
+              items:
+                $ref: '#/components/schemas/Measurement.Response'
+            metricId:
+              type: string
+              format: uuid
+    Measurement.Request:
+      required:
+        - value
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int32
+          description: Unix timestamp at which this observation was taken, defaults to current timestamp
+        value:
+          type: number
+          description: Number to record at this time
+        note:
+          type: string
+    Measurement.Response:
+      allOf:
+        - $ref: '#/components/schemas/Measurement.Request'
+        - type: object
+          required:
+            - value
+            - timestamp
+  parameters:
+    metricId:
+      name: metricId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: UUID of the metric
