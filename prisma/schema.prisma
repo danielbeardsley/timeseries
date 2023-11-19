@@ -12,7 +12,8 @@ datasource db {
 }
 
 model Metric {
-  id        String   @id @default(uuid())
+  id        Int      @id @default(autoincrement())
+  guid      String   @unique @default(uuid())
   name      String
   measurements Measurement[]
 }
@@ -20,6 +21,7 @@ model Metric {
 model Measurement {
   id        Int    @id @default(autoincrement())
   metric    Metric  @relation(fields: [metricId], references: [id])
-  metricId  String
+  metricId  Int
   value     Float
+  time      DateTime @default(now())
 }
