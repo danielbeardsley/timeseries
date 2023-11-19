@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
 import { metricRequestSchema, metricToJson } from './metric-helpers';
-import { Prisma } from '@prisma/client'
 
 import prisma from '../../../lib/prisma';
 
@@ -13,9 +12,10 @@ export async function POST(request: Request) {
       });
    }
 
-   const stuff: Prisma.MetricCreateInput = result.data;
-
-   const metric = await prisma.metric.create({data: result.data});
+   const metric = await prisma.metric.create({
+      data: result.data,
+      include: {measurements: true}
+   });
 
    return NextResponse.json(metricToJson(metric));
 }
